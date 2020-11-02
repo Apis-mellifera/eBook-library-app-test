@@ -1,15 +1,14 @@
 package org.example.objectrepo;
 
-import org.junit.jupiter.api.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.annotations.Test;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 public class LoginPageTest {
 

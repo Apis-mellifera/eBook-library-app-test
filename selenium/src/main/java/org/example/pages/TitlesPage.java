@@ -1,13 +1,13 @@
-package org.example.objectrepo;
+package org.example.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class Title {
+public class LandingPage {
     WebDriver driver;
 
-    public Title(WebDriver driver) {
+    public LandingPage(WebDriver driver) {
         this.driver = driver;
     }
 
