@@ -4,10 +4,12 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class LandingPage {
+import java.util.List;
+
+public class TitlesPage {
     WebDriver driver;
 
-    public LandingPage(WebDriver driver) {
+    public TitlesPage(WebDriver driver) {
         this.driver = driver;
     }
 
@@ -19,8 +21,10 @@ public class LandingPage {
     By items = By.xpath("//button[contains(@class,'copies')]");
     By edit = By.xpath("//button[contains(@class,'edit')]");
     By remove = By.xpath("//button[contains(@class,'remove')]");
+    By titlesList = By.xpath("//li[contains(@id,'title')]");
+    By titlesNames = By.xpath("//div[contains(@class,'primary')]");
 
-    public WebElement addTitle() {
+    public WebElement addTitleBtn() {
         return driver.findElement(addTitle);
     }
 
@@ -50,6 +54,14 @@ public class LandingPage {
 
     public WebElement deleteTitle() {
         return driver.findElement(remove);
+    }
+
+    public List<WebElement> getTitlesList() {
+        return driver.findElements(titlesList);
+    }
+
+    public List<WebElement> getTitlesNames() {
+        return driver.findElements(titlesNames);
     }
 
 

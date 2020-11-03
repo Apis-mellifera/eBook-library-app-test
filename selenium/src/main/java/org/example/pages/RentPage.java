@@ -4,10 +4,10 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 
-public class Rent {
+public class RentPage {
     WebDriver driver;
 
-    public Rent(WebDriver driver) {
+    public RentPage(WebDriver driver) {
         this.driver = driver;
     }
 

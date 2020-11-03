@@ -1,70 +1,76 @@
-package org.example.objectrepo;
+package org.example.pages;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.example.base.Base;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
+import org.testng.Assert;
+import org.testng.annotations.AfterMethod;
+import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
 import java.util.List;
 
 
-public class LoginPageTest {
+public class LoginPageTest extends Base {
+    WebDriver driver;
+    public static Logger log = LogManager.getLogger(LoginPageTest.class.getName());
+
+    @BeforeMethod
+    public void setUp() throws IOException {
+        driver = initializeDriver();
+        log.info("Driver is initialized");
+        driver.get(properties.getProperty("url"));
+        log.info("Navigated to Login Page");
+    }
+
+    @Test(dataProvider = "getData")
+    public void loginUsingIncorrectDataTest(String Username, String Password) throws IOException, InterruptedException {
+        LoginPage loginPage = new LoginPage(driver);
+        loginPage.username().sendKeys(Username);
+        loginPage.password().sendKeys(Password);
+        log.info("Enter incorrect user credentials");
+        loginPage.loginBtn().click();
+        String errorMsg = loginPage.getErrorMessage().getText();
+        Assert.assertTrue(loginPage.getErrorMessage().isDisplayed());
+        Assert.assertEquals(errorMsg, "Login failed");
+        log.info(errorMsg + " - error message validated");
+    }
 
     @Test
-    public void e2eTestPositivePath() {
-        //given
-        System.setProperty("webdriver.gecko.driver", "c:\\selenium-drivers\\firefox\\geckodriver.exe");
-        WebDriver driver = new FirefoxDriver();
-        driver.get("https://ta-ebookrental-fe.herokuapp.com");
-        driver.manage().window().maximize();
-        WebDriverWait wait = new WebDriverWait(driver, 5);
+    public void loginWithEmptyFieldsLeft() {
         LoginPage loginPage = new LoginPage(driver);
-        Title title = new Title(driver);
-        Item item = new Item(driver);
-        Rent rent = new Rent(driver);
+        loginPage.loginBtn().click();
+        String errorMsg = loginPage.getEmptyFieldErrorMessage().getText();
 
-        wait.until(ExpectedConditions.visibilityOfElementLocated(loginPage.username));
-        loginPage.login().sendKeys("user55");
-        loginPage.password().sendKeys("password55");
-        loginPage.submit().click();
+        Assert.assertTrue(loginPage.getEmptyFieldErrorMessage().isDisplayed());
+        Assert.assertEquals(errorMsg, "You can't leave fields empty");
+        log.info("Empty field error message validated");
+    }
 
-        wait.until(ExpectedConditions.elementToBeClickable(title.addTitle));
-        title.addTitle().click();
-        title.enterAuthor().sendKeys("Testing book");
-        title.enterTitle().sendKeys("JJ.Morgan");
-        title.enterYear().sendKeys("2008");
-        title.submitNewTitle().click();
+    @DataProvider
+    public Object[] getData() {
+        Object[][] data = new Object[3][2];
+        data[0][0] = "user55";
+        data[0][1] = "password";
 
-        wait.until(ExpectedConditions.elementToBeClickable(title.items));
-        title.getItems().click();
+        data[1][0] = " ";
+        data[1][1] = "password55";
 
-        wait.until(ExpectedConditions.elementToBeClickable(item.addItem));
-        item.addItem().click();
+        data[2][0] = "user55";
+        data[2][1] = "pasword55";
 
-        wait.until(ExpectedConditions.elementToBeClickable(item.purchaseDate));
-        item.purchaseDateField().click();
-        List<WebElement> dates = driver.findElements(item.day);
-        int count = driver.findElements(item.day).size();
+        return data;
+    }
 
-        for (int i = 0; i< count ; i++) {
-            String text = driver.findElements(item.day).get(i).getText();
-            if(text.equalsIgnoreCase("15")) {
-                driver.findElements(item.day).get(i).click();
-                break;
-            }
-        }
-
-        wait.until(ExpectedConditions.elementToBeClickable(item.newItem));
-        item.submitNewItem().click();
-
-        wait.until(ExpectedConditions.elementToBeClickable(item.history));
-        item.getItemsList().click();
-
-        wait.until(ExpectedConditions.elementToBeClickable(rent.rentItem));
-        rent.createRent().click();
-        rent.enterCustomer().sendKeys("J.Doe");
-        rent.submitRent().click();
+    @AfterMethod
+    public void tearDown() {
+        driver.close();
     }
 }

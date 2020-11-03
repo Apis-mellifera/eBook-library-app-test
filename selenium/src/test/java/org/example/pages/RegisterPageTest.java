@@ -5,8 +5,6 @@ import org.apache.logging.log4j.Logger;
 import org.example.base.Base;
 import org.example.utilities.TestUtil;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.*;
 
@@ -25,15 +23,15 @@ public class RegisterPageTest extends Base {
         log.info("Navigated to Login Page");
     }
 
-    @Test
-    public void registerUsingExistingUser() throws InterruptedException {
+    @Test(dataProvider = "getData")
+    public void registerUsingExistingUser(String username, String password, String repeatPassword) throws InterruptedException {
 
         LoginPage loginPage = new LoginPage(driver);
         RegisterPage registerPage = loginPage.register();
         log.debug("Clicked on Register button");
-        registerPage.username().sendKeys("user55");
-        registerPage.password().sendKeys("password55");
-        registerPage.repeatPassword().sendKeys("password55");
+        registerPage.username().sendKeys(username);
+        registerPage.password().sendKeys(password);
+        registerPage.repeatPassword().sendKeys(repeatPassword);
         log.info("Enter existing user credentials");
         registerPage.registerBtn().click();
         driver.manage().timeouts().implicitlyWait(TestUtil.WAIT, TimeUnit.SECONDS);
@@ -56,6 +54,16 @@ public class RegisterPageTest extends Base {
         Assert.assertTrue(registerPage.getEmptyFieldErrorMessage().isDisplayed());
         Assert.assertTrue(registerPage.getExistingUserErrorMessage().getText().contains("fields empty"));
         log.info("Empty fields error message validated");
+    }
+
+    @DataProvider
+    public Object[] getData() {
+        Object[][] data = new Object[1][3];
+        data[0][0] = "user55";
+        data[0][1] = "password55";
+        data[0][2] = "password55";
+
+        return data;
     }
 
     @AfterMethod
