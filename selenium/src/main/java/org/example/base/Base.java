@@ -3,6 +3,7 @@ package org.example.base;
 import org.example.utilities.TestUtil;
 import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -17,16 +18,21 @@ public class Base {
 
     public WebDriver initializeDriver() throws IOException {
         properties = new Properties();
-        FileInputStream fileInputStream = new FileInputStream("C:\\eBook-library\\selenium\\src\\main\\java\\org\\example\\base\\config.properties");
+        FileInputStream fileInputStream = new FileInputStream(System.getProperty("user.dir") + "\\src\\main\\java\\org\\example\\base\\config.properties");
         properties.load(fileInputStream);
         String browserName = properties.getProperty("browser");
 
-        if(browserName.equals("chrome")) {
-            System.setProperty("webdriver.chrome.driver", "c:\\selenium-drivers\\chrome\\chromedriver.exe");
-            driver = new ChromeDriver();
+        if(browserName.contains("chrome")) {
+            System.setProperty("webdriver.chrome.driver", System.getProperty("user.dir") + "\\src\\main\\resources\\selenium-drivers\\chrome\\chromedriver.exe");
+            ChromeOptions options = new ChromeOptions();
+            if(browserName.contains("headless")) {
+                options.addArguments("headless");
+            }
+            driver = new ChromeDriver(options);
         }
+
         else if (browserName.equals("firefox")) {
-            System.setProperty("webdriver.gecko.driver", "c:\\selenium-drivers\\firefox\\geckodriver.exe");
+            System.setProperty("webdriver.gecko.driver", System.getProperty("user.dir") + "\\src\\main\\resources\\selenium-drivers\\firefox\\geckodriver.exe");
             driver = new FirefoxDriver();
         }
 

@@ -23,6 +23,8 @@ public class TitlesPage {
     By remove = By.xpath("//button[contains(@class,'remove')]");
     By titlesList = By.xpath("//li[contains(@id,'title')]");
     By titlesNames = By.xpath("//div[contains(@class,'primary')]");
+    By subtitle = By.xpath("//*[text()= 'Titles catalog']");
+    By editSubtitle = By.xpath("//div[@class='fog__content']/form/h2");
 
     public WebElement addTitleBtn() {
         return driver.findElement(addTitle);
@@ -64,9 +66,11 @@ public class TitlesPage {
         return driver.findElements(titlesNames);
     }
 
+    public WebElement getEditSubtitle() {
+        return driver.findElement(editSubtitle);
+    }
 
-
-
-
-
+    public WebElement getSubtitle() {
+        return driver.findElement(subtitle);
+    }
 }

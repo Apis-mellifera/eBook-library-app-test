@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
 <suite name="All Test Suite">
-    <test name="C:/eBook-library/selenium">
+    <test name="e-BookLibrary access tests">
         <classes>
             <class name="org.example.pages.LoginPageTest">
                 <methods>
@@ -15,9 +15,16 @@
                     <include name="registerWithEmptyFieldLeft"/>
                 </methods>
             </class>
+        </classes>
+    </test>
+    <test name = "Actions on Titles Page Tests">
+        <classes>
             <class name="org.example.pages.TitlesPageTest">
                 <methods>
                     <include name="createTitle"/>
+                    <include name="showCopies"/>
+                    <include name="editTitle"/>
+                    <include name="deleteTitle"/>
                 </methods>
             </class>
 
